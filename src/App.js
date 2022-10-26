@@ -1,25 +1,69 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { easeInCubic, FlipProvider, useFlip } from "react-easy-flip";
+import "./styles.css";
 
-function App() {
+const tabs = [
+  {
+    id: "home",
+    text: "HOME",
+  },
+  {
+    id: "skills",
+    text: "SKILLS",
+  },
+
+  {
+    id: "projects",
+    text: "PROJECTS",
+  },
+  {
+    id: "blogs",
+    text: "BLOGS",
+  },
+  {
+    id: "contact",
+    text: "CONTACT",
+  },
+];
+
+export default function App() {
+  const [selectedTab, setSelectedTab] = useState("home");
+
+  const selectedTabHandler = (id) => {
+    setSelectedTab(id);
+  };
+
+  const aniationOption = {
+    duration: 500,
+    easing: easeInCubic,
+  };
+  const flipRootId = "flipRoot";
+
+  useFlip(flipRootId, aniationOption);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <FlipProvider>
+      <div className="main" data-flip-root-id={flipRootId}>
+        <div className="flex">
+          {tabs?.map((item, index) => {
+            return (
+              <div
+                onClick={() => selectedTabHandler(item.id)}
+                className="flex-col"
+                key={index}
+              >
+                {item.text}
+
+                {selectedTab === item.id ? (
+                  <div className="active-tab" data-flip-id="highlight" />
+                ) : (
+                  <div className="non-active-tab" />
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </FlipProvider>
   );
 }
-
-export default App;
